@@ -8,16 +8,25 @@ CORS(app)
 HOST_IP = '0.0.0.0'
 PORT = 8080 
 
-
 camera = cv2.VideoCapture(0)
 
 camera.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
 camera.set(cv2.CAP_PROP_FRAME_HEIGHT, 480)
 camera.set(cv2.CAP_PROP_FPS, 30)
 
-
 if not camera.isOpened():
     print("Error: Could not open camera.")
+
+def cannyEdge(fileName: str):
+    img = cv2.imread(fileName)
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    height, width, _ = img.shape
+    scale = 1 / 5
+    heightScale = int(height * scale)
+    widthScale = int(width * scale)
+    img = cv2.resize(img, (widthScale, heightScale), interpolation=cv2.INTER_LINEAR)
+    cannyEdge = cv2.Canny(img, 255, 255)
+    cv2.imshow("canny", cannyEdge)
 
 current_state = {
     'up': False,
@@ -35,6 +44,22 @@ def generate_frames():
             break
 
         (flag, encodedImage) = cv2.imencode(".jpg", frame)
+
+        if not flag:
+            continue
+
+        yield (b'--frame\r\n'
+               b'Content-Type: image/jpeg\r\n\r\n' + 
+               bytearray(encodedImage) + b'\r\n')
+
+def generateopenCVFrames():
+    while True:
+        # Read the camera frame
+        success, frame = camera.read()
+        if not success:
+            break
+
+        (flag, encodedImage) = cv2.imencode(".jpg", cannyEdge(frame))
 
         if not flag:
             continue
