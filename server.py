@@ -79,7 +79,7 @@ def video_feed():
 @app.route('/video_feedUp')
 def upvideo_feed():
     return Response(
-         generateopenCVFrames()
+         generateopenCVFrames(),
          mimetype='multipart/x-mixed-replace; boundary=frame'
     )
 @app.route('/control/set', methods=['POST'])
