@@ -1,6 +1,7 @@
 import cv2
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS 
+
 import time
 
 app = Flask(__name__)
@@ -75,6 +76,12 @@ def video_feed():
         mimetype='multipart/x-mixed-replace; boundary=frame'
     )
 
+@app.route('/video_feedUp')
+def upvideo_feed():
+    return Response(
+         generateopenCVFrames()
+         mimetype='multipart/x-mixed-replace; boundary=frame'
+    )
 @app.route('/control/set', methods=['POST'])
 def control_set():
     global current_state
