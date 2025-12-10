@@ -18,16 +18,17 @@ camera.set(cv2.CAP_PROP_FPS, 30)
 if not camera.isOpened():
     print("Error: Could not open camera.")
 
-def cannyEdge(fileName: str):
-    img = cv2.imread(fileName)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-    height, width, _ = img.shape
-    scale = 1 / 5
-    heightScale = int(height * scale)
-    widthScale = int(width * scale)
-    img = cv2.resize(img, (widthScale, heightScale), interpolation=cv2.INTER_LINEAR)
-    cannyEdge = cv2.Canny(img, 255, 255)
-    cv2.imshow("canny", cannyEdge)
+def cannyEdge(img):
+    #img = cv2.imread(fileName)
+    nImg = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+    #height, width, _ = img.shape
+    #scale = 1 / 5
+    #heightScale = int(height * scale)
+    #widthScale = int(width * scale)
+    #img = cv2.resize(img, (widthScale, heightScale), interpolation=cv2.INTER_LINEAR)
+    canniedEdge = cv2.Canny(nImg, 255, 255)
+    return canniedEdge
+    
 
 current_state = {
     'up': False,
@@ -60,7 +61,8 @@ def generateopenCVFrames():
         if not success:
             break
 
-        (flag, encodedImage) = cv2.imencode(".jpg", cannyEdge(frame))
+        goofusFrame = cannyEdge(frame)
+        (flag, encodedImage) = cv2.imencode(".jpg", goofusFrame)
 
         if not flag:
             continue
