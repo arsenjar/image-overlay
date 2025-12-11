@@ -1,4 +1,5 @@
 import cv2
+from arseny import arsenyCode
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS 
 
@@ -61,8 +62,10 @@ def generateopenCVFrames():
         if not success:
             break
 
-        goofusFrame = cannyEdge(frame)
-        (flag, encodedImage) = cv2.imencode(".jpg", goofusFrame)
+        #goofusFrame = cannyEdge(frame)
+        #(flag, encodedImage) = cv2.imencode(".jpg", goofusFrame)
+        arsenyFrame = arsenyCode(frame)
+        (flag, encodedImage) = cv2.imencode(".jpg", arsenyFrame)
 
         if not flag:
             continue
