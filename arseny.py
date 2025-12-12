@@ -166,13 +166,9 @@
 #     #
 #     # except:
 #     #     print("Can't find right line")
-
-
-
 import numpy as np
 import cv2 as cv
 import cv2
-
 
 def display_midpoint(fitted_line, color, image_circles):
     if fitted_line is not None:
@@ -245,7 +241,7 @@ def arsenyCode(image):
                 if centroid2 is not None:
                     centroids.append(centroid2)
                     cv2.circle(output, centroid2, 7, (255, 0, 255), 4)
-
+            #Раздел кода центральной линии
             if len(centroids) == 2:
                 (x1, y1), (x2, y2) = centroids
                 mx = (x1 + x2) // 2
@@ -260,6 +256,7 @@ def arsenyCode(image):
                     cv.line(output, (width - 1, righty), (0, lefty), (0, 0, 255), 3) # middle line
                     cv.circle(output, (mx, my), 7, (0, 0, 255), 4) #circle at the centure
         except:
+            print("Программа рухнула, мистер Стерн.")
             pass
 
     return output
