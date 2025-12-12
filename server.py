@@ -65,7 +65,6 @@ def generateopenCVFrames():
 
         arsenyFrame = arsenyCode(frame)
 
-        # FINAL SAFETY NET — THIS WILL SAVE YOU FOREVER
         if arsenyFrame is None or arsenyFrame.size == 0:
             h, w = 480, 640
             arsenyFrame = np.zeros((h, w, 3), np.uint8)
