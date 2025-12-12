@@ -1,4 +1,5 @@
 import sqlite3
+import os
 from flask import Flask, render_template, request, redirect, url_for, session
 
 # 1. Database Setup
@@ -30,9 +31,11 @@ def init_db():
 init_db()
 
 # 2. Flask Application Setup
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.dirname(os.path.abspath(__file__)))
 # A secret key is required to use sessions
 app.secret_key = 'a_super_secret_key_for_session' 
+import server
+server.attach_routes(app)
 
 # Route for the main login page
 @app.route('/', methods=['GET'])
@@ -104,4 +107,4 @@ def logout():
 # Run the app
 if __name__ == '__main__':
     # Setting debug=True is useful during development
-    app.run(debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=True, threaded=True)
