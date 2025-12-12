@@ -325,19 +325,19 @@ def arsenyCode(image):
             criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
             K = 2
             ret, labels, centers = cv2.kmeans(points_np, K, None, criteria, 10, cv2.KMEANS_PP_CENTERS)
-
+            # 2 K mean classified groups
             group1_points = points_np[labels.ravel() == 0]
             group2_points = points_np[labels.ravel() == 1]
 
             centroids = []
-
+            # drawing first line
             if len(group1_points) > 1:
                 line1 = cv2.fitLine(group1_points, cv2.DIST_L1, 1, 0.01, 0.01)
                 centroid1 = draw_extended_line(line1, (255, 255, 0))
                 if centroid1 is not None:
                     centroids.append(centroid1)
                     cv2.circle(output, centroid1, 7, (255, 0, 0), 4)
-
+            # drawing second line
             if len(group2_points) > 1:
                 line2 = cv2.fitLine(group2_points, cv2.DIST_L1, 1, 0.01, 0.01)
                 centroid2 = draw_extended_line(line2, (0, 255, 255))
@@ -355,9 +355,8 @@ def arsenyCode(image):
                 if vx != 0:
                     lefty = int((-mx * vy / vx) + my)
                     righty = int(((width - mx) * vy / vx) + my)
-                    cv.line(output, (width - 1, righty), (0, lefty), (0, 0, 255), 3)
-                    cv.circle(output, (mx, my), 7, (0, 0, 255), 4)
-
+                    cv.line(output, (width - 1, righty), (0, lefty), (0, 0, 255), 3) # middle line
+                    cv.circle(output, (mx, my), 7, (0, 0, 255), 4) #circle at the centure
         except:
             pass
 
