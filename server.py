@@ -1,12 +1,10 @@
 import cv2
 from arseny import arsenyCode
-from flask import Flask, Response, request, jsonify
+from flask import Flask, Response, request, jsonify, session, render_template, redirect, url_for
 from flask_cors import CORS 
-from login import app
 import time
+import os
 
-app = Flask(__name__)
-CORS(app)
 HOST_IP = '0.0.0.0'
 PORT = 8080 
 
@@ -74,43 +72,41 @@ def generateopenCVFrames():
                b'Content-Type: image/jpeg\r\n\r\n' + 
                bytearray(encodedImage) + b'\r\n')
 
-@app.route('/gui')
-def gui():
-    if session.get('logged_in'):
-        return render_template('gui.html', username = session.get("username"))
-    else:
-        return redirect(url_for("index", message = "Log in first."))
+def attach_routes(flask_app):
+    CORS(flask_app)
 
-@app.route('/video_feed')
-def video_feed():
-    return Response(
-        generate_frames(),
-        mimetype='multipart/x-mixed-replace; boundary=frame'
-    )
+    @flask_app.route('/gui')
+    def gui():
+        if session.get('logged_in'):
+            return render_template('gui.html', username=session.get("username"))
+        else:
+            return redirect(url_for("index", message="Log in first."))
 
-@app.route('/video_feedUp')
-def upvideo_feed():
-    return Response(
-         generateopenCVFrames(),
-         mimetype='multipart/x-mixed-replace; boundary=frame'
-    )
-@app.route('/control/set', methods=['POST'])
-def control_set():
-    global current_state
-    
-    try:
-        data = request.get_json()
-        current_state.update(data)
+    @flask_app.route('/video_feed')
+    def video_feed():
+        return Response(generate_frames(),
+                        mimetype='multipart/x-mixed-replace; boundary=frame')
 
-        print(f"Received Command: {current_state['command']}, State: {data}")
-        return jsonify({'status': 'success', 'state': current_state})
-    except Exception as e:
-        return jsonify({'status': 'error', 'message': str(e)}), 400
+    @flask_app.route('/video_feedUp')
+    def upvideo_feed():
+        return Response(generateopenCVFrames(),
+                        mimetype='multipart/x-mixed-replace; boundary=frame')
 
-if __name__ == '__main__':
-    print(f"Streaming server running on http://{HOST_IP}:{PORT}")
-    try:
-        app.run(host=HOST_IP, port=PORT, threaded=True)
-    finally:
+    @flask_app.route('/control/set', methods=['POST'])
+    def control_set():
+        global current_state
+        try:
+            data = request.get_json()
+            current_state.update(data)
+            print(f"Received Command: {current_state['command']}, State: {data}")
+            return jsonify({'status': 'success', 'state': current_state})
+        except Exception as e:
+            return jsonify({'status': 'error', 'message': str(e)}), 400
+
+#if __name__ == '__main__':
+    #print(f"Streaming server running on http://{HOST_IP}:{PORT}")
+    #try:
+        #app.run(host=HOST_IP, port=PORT, threaded=True)
+    #finally:
         # Release the camera resource when the server is stopped
-        camera.release()
+        #camera.release()
