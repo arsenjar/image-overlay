@@ -89,7 +89,7 @@ def login():
 def success():
     if 'logged_in' in session and session['logged_in']:
         # This is the page the user sees after successful login/registration
-        return redirect(url_for("gui"))
+        return redirect(url_for('gui'))
     else:
         # If they try to access directly without logging in
         return redirect(url_for('index', message="Please log in first."))
@@ -100,6 +100,13 @@ def logout():
     session.pop('logged_in', None)
     session.pop('username', None)
     return redirect(url_for('index', message="You have been logged out."))
+
+@app.route('/gui')
+def gui():
+    if session.get('logged_in'):
+        return render_template('gui.html', username = session.get("username"))
+    else:
+        return redirect(url_for("index", message = "Log in first."))
 
 # Run the app
 if __name__ == '__main__':
