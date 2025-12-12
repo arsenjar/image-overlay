@@ -164,7 +164,7 @@
             <div class="quadrant" id="quadrant1">
                 <div class="quadrant-header">Quadrant 1: Live Feed</div>
                 <div class="quadrant-content">
-                    <img src="http://172.20.140.7:8080/video_feed" alt="Live Video Feed 1">
+                    <img src="http://127.0.0.1:8080/video_feed" alt="Live Video Feed 1">
                 </div>
             </div>
             <div class="quadrant" id="quadrant2">
@@ -187,7 +187,7 @@
             <div class="quadrant" id="quadrant3">
                 <div class="quadrant-header">Quadrant 3: Live Feed</div>
                 <div class="quadrant-content">
-                    <img id="videoStream" src="http://172.20.140.7:8080/video_feed" alt="Live Video Feed 2">
+                    <img id="videoStream" src="http://127.0.0.1:8080/video_feedUp" alt="Live Video Feed 2">
                 </div>
             </div>
             <div class="quadrant" id="quadrant4">
@@ -204,7 +204,8 @@
         const consoleQuadrant = document.getElementById('console-quadrant');
 
         // Point this at wherever your API runs
-        const BASE = "http://192.168.240.150:8080";
+        // const BASE = "http://192.168.240.150:8080";
+        const BASE = "http://192.168.240.9:8080";
 
         function log(s){
           const now = new Date().toLocaleTimeString();
