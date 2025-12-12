@@ -2,7 +2,7 @@ import cv2
 from arseny import arsenyCode
 from flask import Flask, Response, request, jsonify
 from flask_cors import CORS 
-
+from login import app
 import time
 
 app = Flask(__name__)
@@ -73,6 +73,13 @@ def generateopenCVFrames():
         yield (b'--frame\r\n'
                b'Content-Type: image/jpeg\r\n\r\n' + 
                bytearray(encodedImage) + b'\r\n')
+
+@app.route('/gui')
+def gui():
+    if session.get('logged_in'):
+        return render_template('gui.html', username = session.get("username"))
+    else:
+        return redirect(url_for("index", message = "Log in first."))
 
 @app.route('/video_feed')
 def video_feed():
